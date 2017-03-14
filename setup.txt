@@ -1,0 +1,113 @@
+
+
+
+#########################################
+# Set Execution Policy and Disable UAC  #
+#########################################
+
+Set-ExecutionPolicy Unrestricted 
+Disable-UAC 
+
+###################################
+# Install Chocolatey & Boxstarter # 
+###################################
+
+iwr https://chocolatey.org/install.ps1 -UseBasicParsing | iex
+
+choco install -y boxstarter
+
+###############################################
+# Disable defrag (no need when having an SSD) #
+###############################################
+
+Get-ScheduledTask -TaskName *defrag* | Disable-ScheduledTask
+
+#################
+# .NET 4.6.1  # 
+#################
+
+choco install DotNet4.6.1 -y
+if (Test-PendingReboot) {
+      Invoke-Reboot
+}
+
+###########################################
+# Update Windows and reboot if necessary  #
+###########################################
+
+Install-WindowsUpdate -AcceptEula -GetUpdatesFromMS
+if (Test-PendingReboot) { Invoke-Reboot }
+
+Disable-MicrosoftUpdate
+
+#######################
+# Essential Software  #
+#######################
+
+choco install 7zip.install -y
+
+choco install Firefox -y
+
+choco install -y WindowsSystemControlCenter
+
+choco install -y curl
+
+choco install -y vlc
+
+choco install -y spotify
+
+choco install -y steam 
+
+choco install -y googlechrome
+
+choco install -y putty
+
+choco install -y f.lux
+
+choco install -y speedfan
+
+choco install -y cmder
+
+choco install -y vim
+
+choco install -y git
+
+choco install -y beyondcompare
+
+choco install -y python3
+
+choco install -y atom
+
+choco install -y blender
+
+choco install -y unity
+
+choco install -y visualstudio2015community
+
+choco install -y gimp
+
+
+#### Schedule updates to applications with chocolatey
+schtasks.exe /create /s "localhost" /ru "System" /tn "Update Chocolatey packages" /tr "%ChocolateyInstall%\bin\cup all" /sc DAILY /st 06:00 /F
+Write-BoxstarterMessage "Set update schedule for apps is finished"
+if (Test-PendingReboot) { Invoke-Reboot }
+
+Move-LibraryDirectory "Downloads" "G:\Downloads"
+Install-ChocolateyFileAssociation ".txt" "$env:programfiles\Atom\atom.exe"
+
+Set-WindowsExplorerOptions -EnableShowHiddenFilesFoldersDrives -EnableShowFileExtensions -EnableShowFullPathInTitleBar
+Set-TaskbarOptions -Size Small -Lock
+Disable-InternetExplorerESC
+Disable-BingSearch
+Disable-GameBarTips
+Disable-PSRemoting
+
+Write-BoxstarterMessage "Enabling UAC, Windows Update, and Cleaning up Boxstarter junk"
+################
+Update-ExecutionPolicy Unrestricted
+Enable-MicrosoftUpdate
+Install-WindowsUpdate -acceptEula -GetUpdatesFromMS
+Enable-UAC
+
+
+
