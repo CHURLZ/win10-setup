@@ -83,6 +83,10 @@ choco install -y visualstudio2015community
 
 choco install -y gimp
 
+choco install -y geforce-experience
+
+choco install -y geforce-game-ready-driver-win10
+
 
 #### Schedule updates to applications with chocolatey
 schtasks.exe /create /s "localhost" /ru "System" /tn "Update Chocolatey packages" /tr "%ChocolateyInstall%\bin\cup all" /sc DAILY /st 06:00 /F
