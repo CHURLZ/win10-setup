@@ -87,6 +87,8 @@ choco install -y geforce-experience
 
 choco install -y geforce-game-ready-driver-win10
 
+choco install -y cloudstation
+
 
 #### Schedule updates to applications with chocolatey
 schtasks.exe /create /s "localhost" /ru "System" /tn "Update Chocolatey packages" /tr "%ChocolateyInstall%\bin\cup all" /sc DAILY /st 06:00 /F
